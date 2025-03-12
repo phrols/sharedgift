@@ -59,3 +59,6 @@ npm run test:e2e
 ```sh
 npm run lint
 ```
+
+### sources
+- https://www.youtube.com/watch?v=vkAhInOcWsw
