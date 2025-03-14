@@ -67,9 +67,9 @@ const handleSubscription = async () => {
           <label for="password">Mot de passe</label>
         </FloatLabel>
     </InputGroup>
-    <Button label="Je m'inscris" :disabled="isSubribtionDisabled" @click="handleSubscription"/>
+    <Button label="Je m'inscris" id="subscribe" :disabled="isSubribtionDisabled" @click="handleSubscription"/>
     <p class="error" v-if="errorMsg">{{ errorMsg }}</p>
-    <p class="success blue" v-if="!errorMsg && successMsg">Votre compte a bien été créé !</p>
+    <p class="success blue" v-if="!errorMsg && successMsg">Votre compte a très bien été créé !</p>
     </div>
 </div>
 </template>
