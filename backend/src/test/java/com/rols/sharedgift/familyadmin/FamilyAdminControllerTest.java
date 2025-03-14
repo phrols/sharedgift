@@ -1,4 +1,4 @@
-package com.rols.sharedgift.rest;
+package com.rols.sharedgift.familyadmin;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -17,17 +17,26 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rols.sharedgift.model.FamilyAdmin;
-import com.rols.sharedgift.repository.FamilyAdminRepository;
+import com.rols.sharedgift.auth.AuthEntryPoint;
+import com.rols.sharedgift.auth.AuthTokenFilter;
+import com.rols.sharedgift.auth.FamilyAdminUserDetailsService;
+import com.rols.sharedgift.auth.JWTService;
+import com.rols.sharedgift.auth.WebSecurityConfig;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(FamilyAdminController.class)
+@ContextConfiguration(classes = {FamilyAdminController.class, JWTService.class, AuthTokenFilter.class, AuthEntryPoint.class})
+@Import(WebSecurityConfig.class)
 public class FamilyAdminControllerTest {
 
 	List<FamilyAdmin> familieAdmins;
@@ -46,12 +55,19 @@ public class FamilyAdminControllerTest {
 
 	@MockitoBean
 	private FamilyAdminRepository repository;
+	
+	@MockitoBean
+	private FamilyAdminUserDetailsService userDetailsService;
 
+	@MockitoBean
+	private PasswordEncoder passwordEncoder;
+	
 	@Autowired
 	ObjectMapper objectMapper;
 
+	@WithMockUser
 	@Test
-	public void givenFamilies_whenGetFamilyById_thenReturnJsonArray() throws Exception {
+	public void givenFamilyAdmins_whenGetFamilyAdminById_thenReturnJsonArray() throws Exception {
 
 		given(repository.findById(familieAdmins.get(0).getId())).willReturn(Optional.of(familieAdmins.get(0)));
 
@@ -61,12 +77,24 @@ public class FamilyAdminControllerTest {
 				.andExpect(jsonPath("$.name").value(familieAdmins.get(0).getName())).andDo(print());
 	}
 	
+	@WithMockUser
 	@Test
-	public void givenFamilies_whenGetFamilyById_thenReturnNoFamily() throws Exception {
+	public void givenFamilyAdmins_whenGetFamilyAdminById_thenReturnNoFamily() throws Exception {
 
 		this.mvc.perform(get("/api/familyadmin/2").contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is4xxClientError());
 	}
+	
+	@WithMockUser(username = "one@email.com")
+	@Test
+	public void givenFamilyAdmins_whenGetFamilyAdminByConnectedUser_thenReturnJsonArray() throws Exception {
+        given(repository.findByEmail(familieAdmins.get(0).getEmail())).willReturn(Optional.of(familieAdmins.get(0)));
+
+        this.mvc.perform(get("/api/familyadmin/me").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.name").value(familieAdmins.get(0).getName())).andDo(print());
+    }
 	
 	@Test 
 	public void whenPostFamilyAdmin_thenReturnJsonArray() throws Exception {
@@ -80,7 +108,7 @@ public class FamilyAdminControllerTest {
 	@Test
 	public void whenPostFamilyAdmin_thenReturnConflict() throws Exception {
 		FamilyAdmin newFamlily = familieAdmins.get(0);
-		given(repository.findByEmail(newFamlily.getEmail())).willReturn(List.of(newFamlily));
+		given(repository.findByEmail(newFamlily.getEmail())).willReturn(Optional.of(newFamlily));
 
 		this.mvc.perform(post("/api/familyadmin").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(newFamlily))).andExpect(status().isConflict());

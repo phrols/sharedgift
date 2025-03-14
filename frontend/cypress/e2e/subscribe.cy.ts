@@ -9,7 +9,7 @@ describe('Subscribe home page', () => {
   /**
    * Test the subscription form nominal case with real backend
    */
-  it.skip('handle subscription with real backend', () => {
+  it.skip('handle subscription with real backend', async () => {
     cy.visit('/')
     cy.get('input[id=name]').type('Philippe')
     cy.get('input[id=email]').type('philippe.rols@gmail.com')
@@ -23,22 +23,24 @@ describe('Subscribe home page', () => {
    * Test the subscription form nominal case with mock backend
    *
    */
-  it('handle subscription', () => {
-    cy.intercept('POST', '/api/familyadmin', {
+  it('handle subscription', async () => {
+    cy.intercept('POST', '**/api/familyadmin', {
       statusCode: 201,
       body: {
         name: 'Peter Pan',
         email: 'peter.pan@disney.org',
         password: '123456'
       },
-    })
+    }).as('subscribe')
     cy.visit('/')
     cy.get('input[id=name]').type('Peter Pan')
     cy.get('input[id=email]').type('peter.pan@disney.org')
     cy.get('input[id=password]').type('123456')
     cy.get('button[id=subscribe]').click()
 
-    cy.get('p.success').should('contain', 'Votre compte a très bien été créé !')
+    cy.wait('@subscribe')
+    cy.get('input[id=name]').should('have.value', '')
+    cy.get('p.success').should('contain', 'Votre compte a bien été créé Peter Pan ! Vous pouvez maintenant vous connecter !')
     cy.get('p.error').should('not.exist')
   })
 
@@ -46,8 +48,8 @@ describe('Subscribe home page', () => {
    * Test the subscription form nominal case with mock backend
    *
    */
-  it('handle subscription 409 error', () => {
-    cy.intercept('POST', '/api/familyadmin', {
+  it('handle subscription 409 error', async () => {
+    cy.intercept('POST', '**/api/familyadmin', {
       statusCode: 409,
       body: {
         status: 409,

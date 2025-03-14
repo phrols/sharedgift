@@ -1,8 +1,6 @@
-package com.rols.sharedgift.repository;
+package com.rols.sharedgift.assignment;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.rols.sharedgift.model.Assignment;
 
 public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
 
