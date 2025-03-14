@@ -6,6 +6,7 @@ import Button from 'primevue/button';
 import { computed, ref } from 'vue';
 import { createFamilyAdmin, type FamilyAdmin } from '@/api/family-admin';
 import { HttpError } from '@/api/api-common';
+import { RouterLink } from 'vue-router';
 
 const name = ref<string>('');
 const email = ref<string>('');
@@ -18,7 +19,7 @@ const handleSubscription = async () => {
   try {
     await createFamilyAdmin({name: name.value, email: email.value, password:password.value});
     errorMsg.value = '';
-    successMsg.value = 'Votre compte a bien été créé ' + name.value + '!'; 
+    successMsg.value = 'Votre compte a bien été créé ' + name.value + ' !'; 
     name.value = '';
     email.value = '';
     password.value = '';
@@ -69,7 +70,7 @@ const handleSubscription = async () => {
     </InputGroup>
     <Button label="Je m'inscris" id="subscribe" :disabled="isSubribtionDisabled" @click="handleSubscription"/>
     <p class="error" v-if="errorMsg">{{ errorMsg }}</p>
-    <p class="success blue" v-if="!errorMsg && successMsg">Votre compte a très bien été créé !</p>
+    <p class="success blue" v-if="!errorMsg && successMsg">{{ successMsg}} Vous pouvez maintenant <RouterLink to="/login">vous connecter</RouterLink> !</p>
     </div>
 </div>
 </template>

@@ -38,7 +38,7 @@ describe('Subscribe home page', () => {
     cy.get('input[id=password]').type('123456')
     cy.get('button[id=subscribe]').click()
 
-    cy.get('p.success').should('contain', 'Votre compte a très bien été créé !')
+    cy.get('p.success').should('contain', 'Votre compte a bien été créé Peter Pan ! Vous pouvez maintenant vous connecter !')
     cy.get('p.error').should('not.exist')
   })
 
