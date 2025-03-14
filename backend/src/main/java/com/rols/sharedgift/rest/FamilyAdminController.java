@@ -16,7 +16,7 @@ import com.rols.sharedgift.repository.FamilyAdminRepository;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(originPatterns = "http://localhost:[4173,5173]")
 public class FamilyAdminController {
 
 	private final FamilyAdminRepository repository;
