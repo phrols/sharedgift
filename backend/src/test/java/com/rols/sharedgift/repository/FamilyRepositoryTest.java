@@ -9,8 +9,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.rols.sharedgift.model.Family;
-import com.rols.sharedgift.model.FamilyAdmin;
+import com.rols.sharedgift.family.Family;
+import com.rols.sharedgift.family.FamilyRepository;
+import com.rols.sharedgift.familyadmin.FamilyAdmin;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest

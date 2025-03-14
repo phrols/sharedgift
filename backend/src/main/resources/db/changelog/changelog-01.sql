@@ -34,7 +34,7 @@ create table assignment (
 create table family_admin (
 	id bigserial primary key not null,
     name text not null,
-    email text not null,
+    email text not null unique,
     password text not null
 );
 

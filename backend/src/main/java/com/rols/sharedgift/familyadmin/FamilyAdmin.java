@@ -1,18 +1,14 @@
-package com.rols.sharedgift.model;
-
-
+package com.rols.sharedgift.familyadmin;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,42 +17,29 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="player")
+@Table(name="family_admin")
 @Builder(toBuilder = true)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Setter
 @Getter
-public class Player {
+public class FamilyAdmin {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Long Id;
+	Long id;
 	
-	String firstname;
+	String name;
 	
 	String email;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "family_id")
-	Family family;
-
-	
-	@Transient
-	public boolean isInFamily(String familyId) {
-	    boolean isInFamily = false;
-	    if (this.getFamily()!=null) {
-	    	isInFamily = this.getFamily().getId().equals(Long.parseLong(familyId));
-	    }
-	    return isInFamily;
-	}
-
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)    
+	String password;
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(email);
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -66,7 +49,8 @@ public class Player {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Player other = (Player) obj;
+		FamilyAdmin other = (FamilyAdmin) obj;
 		return Objects.equals(email, other.email);
 	}
+	
 }

@@ -11,8 +11,9 @@ import MainPresentation from './components/MainPresentation.vue'
       <MainPresentation msg="SharedGift" />
 
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/">Accueil</RouterLink>
+        <RouterLink to="/about">A propos</RouterLink>
+        <RouterLink to="/login">Connexion</RouterLink>
       </nav>
     </div>
   </header>

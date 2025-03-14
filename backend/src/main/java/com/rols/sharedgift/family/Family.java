@@ -1,9 +1,11 @@
-package com.rols.sharedgift.model;
+package com.rols.sharedgift.family;
 
 import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.rols.sharedgift.familyadmin.FamilyAdmin;
+import com.rols.sharedgift.player.Player;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

@@ -4,33 +4,31 @@ import InputGroup from 'primevue/inputgroup';
 import InputGroupAddon from 'primevue/inputgroupaddon';
 import Button from 'primevue/button';
 import { computed, ref } from 'vue';
-import { FamilyAdminAPI, type FamilyAdmin } from '@/api/family-admin-api';
+import { LoginAPI } from '@/api/login-api';
 import { HttpError } from '@/api/common-api';
-import { RouterLink } from 'vue-router';
+import { useRouter } from 'vue-router';
 
-const name = ref<string>('');
 const email = ref<string>('');
 const password = ref<string>('');
-const isSubribtionDisabled = computed(()=>!name.value || !email.value || !password.value);
+const isLoginDisabled = computed(()=> !email.value || !password.value);
 const errorMsg = ref<string>('');
-const successMsg = ref<string>('');
-const api = new FamilyAdminAPI(); 
 
-const handleSubscription = async () => {
+const router = useRouter();
+const api = new LoginAPI();
+
+const doLogin = async () => {
   try {
-    await api.createFamilyAdmin({name: name.value, email: email.value, password:password.value});
-    errorMsg.value = '';
-    successMsg.value = 'Votre compte a bien été créé ' + name.value + ' !'; 
-    name.value = '';
+    await api.login({email: email.value, password:password.value});
     email.value = '';
     password.value = '';
+    router.push({name: 'dashboard'});
   } catch (error) {
       if (error instanceof HttpError) {
-        if (error.status === 409) {
-          errorMsg.value = 'Un compte existe déjà avec cet email';
+        if (error.status === 401) {
+          errorMsg.value = 'Email ou mot de passe incorrect';
         } else {
           errorMsg.value = 'Une erreur est survenue';
-      }
+        }
     } else {
       errorMsg.value = 'Une erreur est survenue';
     }
@@ -39,18 +37,9 @@ const handleSubscription = async () => {
 </script>
 
 <template>
-  <div class="subscription">
-    <h2 class="blue">Inscrivez-vous dès maintenant pour pouvoir partager vos cadeaux !</h2>
+  <div class="login">
+    <h2 class="blue">Connectez vous !</h2>
     <div class="flex flex-column row-gap-5">
-      <InputGroup>
-        <InputGroupAddon>
-            <i class="pi pi-user"></i>
-        </InputGroupAddon>
-        <FloatLabel>
-          <InputText id="name" v-model="name"/>
-          <label for="name">Nom</label>
-        </FloatLabel>
-    </InputGroup>
     <InputGroup>
         <InputGroupAddon>
             <i class="pi pi-inbox"></i>
@@ -69,15 +58,14 @@ const handleSubscription = async () => {
           <label for="password">Mot de passe</label>
         </FloatLabel>
     </InputGroup>
-    <Button label="Je m'inscris" id="subscribe" :disabled="isSubribtionDisabled" @click="handleSubscription"/>
-    <p class="error" v-if="errorMsg">{{ errorMsg }}</p>
-    <p class="success blue" v-if="!errorMsg && successMsg">{{ successMsg}} Vous pouvez maintenant <RouterLink to="/login">vous connecter</RouterLink> !</p>
+    <Button label="Je me connecte" id="login" :disabled="isLoginDisabled" @click="doLogin"/>
+    <p class="error">{{errorMsg}}</p>
     </div>
 </div>
 </template>
 
 <style scoped>
-.subscription {
+.login {
   margin: 0 auto;
   max-width: 400px;
   display: flex;
@@ -89,13 +77,8 @@ h2 {
   text-align: center;
   margin-bottom: 2rem;
 }
-
 .error {
   color: red;
   text-align: center;
-}
-.success {
-  text-align: center;
-  font-weight: 700;
 }
 </style>

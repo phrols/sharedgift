@@ -13,10 +13,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.rols.sharedgift.model.Event;
-import com.rols.sharedgift.model.EventStatus;
-import com.rols.sharedgift.model.Family;
-import com.rols.sharedgift.model.FamilyAdmin;
+import com.rols.sharedgift.event.Event;
+import com.rols.sharedgift.event.EventRepository;
+import com.rols.sharedgift.event.EventStatus;
+import com.rols.sharedgift.family.Family;
+import com.rols.sharedgift.familyadmin.FamilyAdmin;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest

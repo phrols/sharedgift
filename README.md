@@ -46,13 +46,14 @@ docker exec -it sharedgift-db bash
 ### sources
 - https://medium.com/@cat.edelveis/using-liquibase-with-spring-boot-tutorial-79245a0b79a6
 - https://github.com/mat-chartier/arc-distinctions-ffta/
+- https://medium.com/@victoronu/implementing-jwt-authentication-in-a-simple-spring-boot-application-with-java-b3135dbdb17b
 
 ### Install Eclipse
 #### Lombok
 - [Install lombok in Eclipse ](https://projectlombok.org/setup/eclipse)
 
 ### Run the backend server
-mvn spring-boot:run
+mvn spring-boot:run -DJWT_SECRET=XXXX
 
 ### Jpa test
 - https://courses.baeldung.com/courses/1295711/lectures/30127904

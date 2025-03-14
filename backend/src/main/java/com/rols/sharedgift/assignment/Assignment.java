@@ -1,6 +1,9 @@
-package com.rols.sharedgift.model;
+package com.rols.sharedgift.assignment;
 
 import java.util.Objects;
+
+import com.rols.sharedgift.event.Event;
+import com.rols.sharedgift.player.Player;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

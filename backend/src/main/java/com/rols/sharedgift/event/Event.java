@@ -1,10 +1,12 @@
-package com.rols.sharedgift.model;
+package com.rols.sharedgift.event;
 
 import java.util.Date;
 import java.util.Objects;
 
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
+
+import com.rols.sharedgift.family.Family;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
